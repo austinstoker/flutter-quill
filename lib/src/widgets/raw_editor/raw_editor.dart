@@ -334,7 +334,7 @@ class RawEditorState extends EditorState
   String get pastePlainText => _pastePlainText;
   String _pastePlainText = '';
 
-  final ClipboardStatusNotifier _clipboardStatus = ClipboardStatusNotifier();
+  final ClipboardStatusNotifier? _clipboardStatus = null;
   final LayerLink _toolbarLayerLink = LayerLink();
   final LayerLink _startHandleLayerLink = LayerLink();
   final LayerLink _endHandleLayerLink = LayerLink();
@@ -359,7 +359,7 @@ class RawEditorState extends EditorState
   /// Copied from [EditableTextState].
   List<ContextMenuButtonItem> get contextMenuButtonItems {
     return EditableText.getEditableButtonItems(
-      clipboardStatus: _clipboardStatus.value,
+      clipboardStatus: _clipboardStatus?.value,
       onLiveTextInput: null,
       onCopy: copyEnabled
           ? () => copySelection(SelectionChangedCause.toolbar)
@@ -1081,7 +1081,7 @@ class RawEditorState extends EditorState
   void initState() {
     super.initState();
 
-    _clipboardStatus.addListener(_onChangedClipboardStatus);
+    _clipboardStatus?.addListener(_onChangedClipboardStatus);
 
     controller.addListener(_didChangeTextEditingValueListener);
 
@@ -1232,9 +1232,9 @@ class RawEditorState extends EditorState
     controller.removeListener(_didChangeTextEditingValueListener);
     widget.focusNode.removeListener(_handleFocusChanged);
     _cursorCont.dispose();
-    _clipboardStatus
-      ..removeListener(_onChangedClipboardStatus)
-      ..dispose();
+    _clipboardStatus?.removeListener(_onChangedClipboardStatus);
+    _clipboardStatus?.dispose();
+
     super.dispose();
   }
 
